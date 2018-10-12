@@ -3,13 +3,28 @@ import { Consumer } from "../../Context";
 import TextInputGroup from "../layout/TextInputGroup.js";
 import axios from "axios";
 
-class AddContact extends Component {
+class EditContact extends Component {
   state = {
     name: "",
     email: "",
     phone: "",
     error: {}
   };
+
+  async componentDidMount() {
+    const { id } = this.props.match.params;
+    const res = await axios.get(
+      `https://jsonplaceholder.typicode.com/users/${id}`
+    );
+
+    const contact = res.data;
+
+    this.setState({
+      name: contact.name,
+      email: contact.email,
+      phone: contact.phone
+    });
+  }
 
   onChange = e => {
     const inputText = e.target.value;
@@ -53,14 +68,15 @@ class AddContact extends Component {
         email,
         phone
       };
+      const id = this.props.match.params.id;
 
-      const res = await axios.post(
-        "https://jsonplaceholder.typicode.com/users",
+      const res = await axios.put(
+        `https://jsonplaceholder.typicode.com/users/${id}`,
         newContact
       );
 
       dispatch({
-        type: "ADD_CONTACT",
+        type: "UPDATE_CONTACT",
         payload: res.data
       });
 
@@ -82,7 +98,7 @@ class AddContact extends Component {
           const { dispatch } = value;
           return (
             <div className="card mb-3">
-              <div className="card-header">Add Contact </div>
+              <div className="card-header">Edit Contact </div>
               <div className="card-body">
                 <form onSubmit={this.onSubmit.bind(this, dispatch)}>
                   <TextInputGroup
@@ -114,7 +130,7 @@ class AddContact extends Component {
                   />
                   <input
                     type="submit"
-                    value="Add Contact"
+                    value="Update Contact"
                     className="btn btn-block btn-light"
                   />
                 </form>
@@ -127,4 +143,4 @@ class AddContact extends Component {
   }
 }
 
-export default AddContact;
+export default EditContact;
