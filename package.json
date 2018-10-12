@@ -1,4 +1,5 @@
 {
+  "homepage": "https://malveegithub.github.io/react-contact-list",
   "name": "contact",
   "version": "0.1.0",
   "private": true,
@@ -14,6 +15,7 @@
     "uuid": "^3.3.2"
   },
   "scripts": {
+    "deploy": "npm run build&& gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
